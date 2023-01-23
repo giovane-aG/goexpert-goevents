@@ -2,20 +2,20 @@ package events
 
 import "time"
 
-type Event interface {
+type EventInterface interface {
 	GetName() string
 	GetDateTime() time.Time
 	GeyPayload() interface{}
 }
 
-type EventHandler interface {
-	handle(event Event)
+type EventHandlerInterface interface {
+	handle(event EventInterface)
 }
 
-type EventManager interface {
-	Register(eventName string, handler EventHandler) error
-	Dispatch(eventName string, handler EventHandler) error
-	Remove(eventName string, handler EventHandler) error
-	Has(eventName string, handler EventHandler) bool
+type EventManagerInterface interface {
+	Register(eventName string, handler EventHandlerInterface) error
+	Dispatch(eventName string, handler EventHandlerInterface) error
+	Remove(eventName string, handler EventHandlerInterface) error
+	Has(eventName string, handler EventHandlerInterface) bool
 	Clear() error
 }
