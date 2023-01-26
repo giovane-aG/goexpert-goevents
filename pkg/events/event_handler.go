@@ -1,8 +1,12 @@
 package events
 
-import "fmt"
+import (
+	"fmt"
+)
 
-type EventHandler struct{}
+type EventHandler struct {
+	ID int8
+}
 
 func NewEventHandler() *EventHandler {
 	return &EventHandler{}
