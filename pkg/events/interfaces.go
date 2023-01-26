@@ -13,7 +13,7 @@ type EventHandlerInterface interface {
 }
 
 type EventManagerInterface interface {
-	Register(eventName string, handler EventHandlerInterface) error
+	Register(eventName string, handler *EventHandlerInterface) error
 	Dispatch(eventName string, handler EventHandlerInterface) error
 	Remove(eventName string, handler EventHandlerInterface) error
 	Has(eventName string, handler EventHandlerInterface) bool

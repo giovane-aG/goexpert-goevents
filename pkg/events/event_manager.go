@@ -18,15 +18,15 @@ func NewEventManager() *EventManager {
 	}
 }
 
-func (e *EventManager) Register(eventName string, handler EventHandlerInterface) error {
+func (e *EventManager) Register(eventName string, handler *EventHandlerInterface) error {
 	if _, hasRegisteredEvent := e.handlers[eventName]; hasRegisteredEvent {
 		for _, savedHandler := range e.handlers[eventName] {
-			if &savedHandler == &handler {
+			if savedHandler == *handler {
 				return errors.New(EventHasAlreadyBeenRegistered)
 			}
 		}
 	}
 
-	e.handlers[eventName] = append(e.handlers[eventName], handler)
+	e.handlers[eventName] = append(e.handlers[eventName], *handler)
 	return nil
 }
