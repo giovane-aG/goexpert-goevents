@@ -31,6 +31,17 @@ func (e *EventManager) Register(eventName string, handler *EventHandlerInterface
 	return nil
 }
 
+func (e *EventManager) Has(eventName string, handler *EventHandlerInterface) bool {
+	if hasHandlers := e.handlers[eventName]; hasHandlers != nil {
+		for _, savedHandler := range e.handlers[eventName] {
+			if savedHandler == *handler {
+				return true
+			}
+		}
+	}
+	return false
+}
+
 func (e *EventManager) Clear() {
 	e.handlers = make(map[string][]EventHandlerInterface)
 }
