@@ -63,3 +63,11 @@ func (suite *EventManagerTestSuite) Test_Clear() {
 	suite.Nil(err)
 	suite.Equal(len(suite.eventManager.handlers), 0)
 }
+
+func (suite *EventManagerTestSuite) Test_Has() {
+	err := suite.eventManager.Register(suite.event3.GetName(), &suite.eventHandler3)
+	hasEvent := suite.eventManager.Has(suite.event3.GetName(), &suite.eventHandler3)
+
+	suite.Nil(err)
+	suite.True(hasEvent)
+}
