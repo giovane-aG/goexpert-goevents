@@ -32,7 +32,7 @@ func (e *EventManager) Register(eventName string, handler *EventHandlerInterface
 }
 
 func (e *EventManager) Has(eventName string, handler *EventHandlerInterface) bool {
-	if hasHandlers := e.handlers[eventName]; hasHandlers != nil {
+	if _, hasHandlers := e.handlers[eventName]; hasHandlers {
 		for _, savedHandler := range e.handlers[eventName] {
 			if savedHandler == *handler {
 				return true
