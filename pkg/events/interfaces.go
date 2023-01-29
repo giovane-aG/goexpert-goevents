@@ -5,7 +5,7 @@ import "time"
 type EventInterface interface {
 	GetName() string
 	GetDateTime() time.Time
-	GeyPayload() interface{}
+	GetPayload() interface{}
 }
 
 type EventHandlerInterface interface {
@@ -13,8 +13,8 @@ type EventHandlerInterface interface {
 }
 
 type EventManagerInterface interface {
-	Register(eventName string, handler *EventHandlerInterface) error
-	Dispatch(eventName string, handler EventHandlerInterface) error
+	Register(eventName string, handler EventHandlerInterface) error
+	Dispatch(event EventInterface) error
 	Remove(eventName string, handler EventHandlerInterface) error
 	Has(eventName string, handler EventHandlerInterface) bool
 	Clear() error
