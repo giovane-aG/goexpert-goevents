@@ -90,3 +90,19 @@ func (suite *EventManagerTestSuite) Test_Dispatch() {
 	mockedEventHandler.AssertExpectations(suite.T())
 	mockedEventHandler.AssertNumberOfCalls(suite.T(), "Handle", 1)
 }
+
+func (suite *EventManagerTestSuite) Test_Remove() {
+	// register two handlers
+	err1 := suite.eventManager.Register(suite.event1.GetName(), suite.eventHandler1)
+	err2 := suite.eventManager.Register(suite.event1.GetName(), suite.eventHandler2)
+
+	suite.Nil(err1)
+	suite.Nil(err2)
+	suite.Equal(len(suite.eventManager.handlers[suite.event1.GetName()]), 2)
+
+	// removes the handler
+	err3 := suite.eventManager.Remove(suite.event1.GetName(), suite.eventHandler1)
+
+	suite.Nil(err3)
+	suite.Equal(len(suite.eventManager.handlers[suite.event1.GetName()]), 1)
+}
