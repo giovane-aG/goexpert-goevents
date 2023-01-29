@@ -3,6 +3,7 @@ package events
 import (
 	"testing"
 
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -36,8 +37,8 @@ func TestSuite(t *testing.T) {
 
 func (suite *EventManagerTestSuite) Test_Register() {
 
-	err := suite.eventManager.Register(suite.event1.GetName(), &suite.eventHandler1)
-	err2 := suite.eventManager.Register(suite.event1.GetName(), &suite.eventHandler2)
+	err := suite.eventManager.Register(suite.event1.GetName(), suite.eventHandler1)
+	err2 := suite.eventManager.Register(suite.event1.GetName(), suite.eventHandler2)
 
 	suite.Nil(err)
 	suite.Nil(err2)
@@ -47,9 +48,8 @@ func (suite *EventManagerTestSuite) Test_Register() {
 }
 
 func (suite *EventManagerTestSuite) Test_RegisterSameHandler() {
-	pointer := &suite.eventHandler1
-	err := suite.eventManager.Register(suite.event1.GetName(), pointer)
-	err2 := suite.eventManager.Register(suite.event1.GetName(), pointer)
+	err := suite.eventManager.Register(suite.event1.GetName(), suite.eventHandler1)
+	err2 := suite.eventManager.Register(suite.event1.GetName(), suite.eventHandler1)
 
 	suite.Nil(err)
 	suite.NotNil(err2)
@@ -57,7 +57,7 @@ func (suite *EventManagerTestSuite) Test_RegisterSameHandler() {
 }
 
 func (suite *EventManagerTestSuite) Test_Clear() {
-	err := suite.eventManager.Register(suite.event3.GetName(), &suite.eventHandler3)
+	err := suite.eventManager.Register(suite.event3.GetName(), suite.eventHandler3)
 	suite.eventManager.Clear()
 
 	suite.Nil(err)
@@ -65,9 +65,28 @@ func (suite *EventManagerTestSuite) Test_Clear() {
 }
 
 func (suite *EventManagerTestSuite) Test_Has() {
-	err := suite.eventManager.Register(suite.event3.GetName(), &suite.eventHandler3)
+	err := suite.eventManager.Register(suite.event3.GetName(), suite.eventHandler3)
 	hasEvent := suite.eventManager.Has(suite.event3.GetName(), &suite.eventHandler3)
 
 	suite.Nil(err)
 	suite.True(hasEvent)
+}
+
+type MockHandler struct {
+	mock.Mock
+}
+
+func (m *MockHandler) Handle(event EventInterface) {
+	m.Called(event)
+}
+
+func (suite *EventManagerTestSuite) Test_Dispatch() {
+	mockedEventHandler := &MockHandler{}
+	mockedEventHandler.On("Handle", suite.event1)
+
+	suite.eventManager.Register(suite.event1.GetName(), mockedEventHandler)
+	suite.eventManager.Dispatch(suite.event1)
+
+	mockedEventHandler.AssertExpectations(suite.T())
+	mockedEventHandler.AssertNumberOfCalls(suite.T(), "Handle", 1)
 }
