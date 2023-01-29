@@ -18,16 +18,16 @@ func NewEventManager() *EventManager {
 	}
 }
 
-func (e *EventManager) Register(eventName string, handler *EventHandlerInterface) error {
+func (e *EventManager) Register(eventName string, handler EventHandlerInterface) error {
 	if _, hasRegisteredEvent := e.handlers[eventName]; hasRegisteredEvent {
 		for _, savedHandler := range e.handlers[eventName] {
-			if savedHandler == *handler {
+			if savedHandler == handler {
 				return errors.New(EventHasAlreadyBeenRegistered)
 			}
 		}
 	}
 
-	e.handlers[eventName] = append(e.handlers[eventName], *handler)
+	e.handlers[eventName] = append(e.handlers[eventName], handler)
 	return nil
 }
 
@@ -44,4 +44,14 @@ func (e *EventManager) Has(eventName string, handler *EventHandlerInterface) boo
 
 func (e *EventManager) Clear() {
 	e.handlers = make(map[string][]EventHandlerInterface)
+}
+
+func (e *EventManager) Dispatch(event EventInterface) error {
+	if handlers, ok := e.handlers[event.GetName()]; ok {
+		for _, handler := range handlers {
+			handler.Handle(event)
+		}
+	}
+
+	return nil
 }
