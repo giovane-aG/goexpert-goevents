@@ -3,25 +3,25 @@ package events
 import "time"
 
 type Event struct {
-	Name         string
-	Payload      interface{}
-	RegisteredAt time.Time
+	name         string
+	payload      interface{}
+	registeredAt time.Time
 }
 
 func NewEvent(name string, payload interface{}) *Event {
 	return &Event{
-		Name:         name,
-		Payload:      payload,
-		RegisteredAt: time.Now(),
+		name:         name,
+		payload:      payload,
+		registeredAt: time.Now(),
 	}
 }
 
 func (e *Event) GetName() string {
-	return e.Name
+	return e.name
 }
 func (e *Event) GetDateTime() time.Time {
-	return e.RegisteredAt
+	return e.registeredAt
 }
 func (e *Event) GetPayload() interface{} {
-	return e.Payload
+	return e.payload
 }
