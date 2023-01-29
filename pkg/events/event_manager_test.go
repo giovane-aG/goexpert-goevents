@@ -105,4 +105,8 @@ func (suite *EventManagerTestSuite) Test_Remove() {
 
 	suite.Nil(err3)
 	suite.Equal(len(suite.eventManager.handlers[suite.event1.GetName()]), 1)
+
+	// checking if the removed event is actually
+	remainingEvent := suite.eventManager.handlers[suite.event1.GetName()][0]
+	suite.Equal(remainingEvent, suite.eventHandler2)
 }
