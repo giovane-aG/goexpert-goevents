@@ -58,13 +58,11 @@ func (e *EventManager) Dispatch(event EventInterface) error {
 
 func (e *EventManager) Remove(eventName string, handler EventHandlerInterface) error {
 	if handlers, ok := e.handlers[eventName]; ok {
-		newHandlers := []EventHandlerInterface{}
-		for _, savedHandler := range handlers {
-			if savedHandler != handler {
-				newHandlers = append(newHandlers, savedHandler)
+		for i, savedHandler := range handlers {
+			if savedHandler == handler {
+				e.handlers[eventName] = append(e.handlers[eventName][:i], e.handlers[eventName][i+1:]...)
 			}
 		}
-		e.handlers[eventName] = newHandlers
 	}
 
 	return nil
