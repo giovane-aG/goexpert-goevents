@@ -1,6 +1,7 @@
 package events
 
 import (
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/mock"
@@ -76,8 +77,9 @@ type MockHandler struct {
 	mock.Mock
 }
 
-func (m *MockHandler) Handle(event EventInterface) {
+func (m *MockHandler) Handle(event EventInterface, wg *sync.WaitGroup) {
 	m.Called(event)
+	wg.Done()
 }
 
 func (suite *EventManagerTestSuite) Test_Dispatch() {
