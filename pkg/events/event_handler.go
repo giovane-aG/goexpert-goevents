@@ -2,6 +2,7 @@ package events
 
 import (
 	"fmt"
+	"sync"
 )
 
 type EventHandler struct {
@@ -12,6 +13,7 @@ func NewEventHandler() *EventHandler {
 	return &EventHandler{}
 }
 
-func (e *EventHandler) Handle(event EventInterface) {
+func (e *EventHandler) Handle(event EventInterface, wg *sync.WaitGroup) {
 	fmt.Println(event.GetName())
+	wg.Done()
 }
