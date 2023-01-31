@@ -15,3 +15,22 @@ func OpenChannel() *amqp.Channel {
 
 	return ch
 }
+
+func Consume(ch *amqp.Channel, out chan<- amqp.Delivery) error {
+	msgs, err := ch.Consume(
+		"fila",
+		"go-consumer",
+		false,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		return err
+	}
+	for msg := range msgs {
+		out <- msg
+	}
+	return nil
+}
