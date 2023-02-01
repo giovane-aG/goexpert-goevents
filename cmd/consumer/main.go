@@ -10,12 +10,9 @@ import (
 func main() {
 	ch := rabbitmq.OpenChannel()
 	msgChannel := make(chan amqp.Delivery)
-
-	err := rabbitmq.Consume(ch, msgChannel)
-	if err != nil {
-		panic(err)
-	}
 	defer ch.Close()
+
+	go rabbitmq.Consume(ch, msgChannel, "orders")
 
 	for msg := range msgChannel {
 		fmt.Println(string(msg.Body))
