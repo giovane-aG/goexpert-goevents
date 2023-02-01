@@ -40,10 +40,17 @@ func Consume(ch *amqp.Channel, out chan<- amqp.Delivery) error {
 }
 
 func Publish(ch *amqp.Channel, body string, ctx context.Context) error {
-	err := ch.PublishWithContext(ctx, "amq.direct", "", false, false, amqp.Publishing{
-		ContentType: "text/plain",
-		Body:        []byte(body),
-	})
+	err := ch.PublishWithContext(
+		ctx,
+		"amq.direct",
+		"",
+		false,
+		false,
+		amqp.Publishing{
+			ContentType: "text/plain",
+			Body:        []byte(body),
+		},
+	)
 	if err != nil {
 		return err
 	}
