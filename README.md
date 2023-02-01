@@ -1,3 +1,9 @@
 # Go expert events
 
-Repositório criado para colocar em prática a implementação de eventos em Go.
+Repository created with the intetion of practicing event handling with Go.
+
+### Technologies 🛠
+- Go
+- Channels
+- RabbitMQ
+
